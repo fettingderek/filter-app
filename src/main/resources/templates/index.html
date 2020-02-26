@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Players</title>
+</head>
+<body>
+<h1>Player List</h1>
+
+<div>
+  <input id="search_query" type="text"/>
+  <button type="button" onclick="loadDoc()">Filter</button>
+</div>
+
+<div id="demo"></div>
+
+<script>
+  function updateTable(playerJson) {
+    var playerList = JSON.parse(playerJson);
+    var tableHtml = "<table><th>Last</th><th>First</th><th>Position</th><th>Height</th><th>Weight</th>";
+    for (player of playerList) {
+      tableHtml += "<tr>";
+      tableHtml += "<td>" + player.lastName + "</td>";
+      tableHtml += "<td>" + player.firstName + "</td>";
+      tableHtml += "<td>" + (player.position === null ? "" : player.position) + "</td>";
+      tableHtml += "<td>" + (player.heightInInches === null
+          ? ""
+          : Math.floor(player.heightInInches / 12) + "'" + (player.heightInInches % 12) + '"')
+          + "</td>";
+      tableHtml += "<td>" + (player.weightInLbs === null ? "" : player.weightInLbs) + "</td>";
+      tableHtml += "</tr>";
+    }
+    tableHtml += "</table>"
+    document.getElementById("demo").innerHTML = tableHtml;
+  }
+
+  function loadDoc() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange=function() {
+      if (this.readyState == 4 && this.status == 200) {
+        updateTable(this.responseText);
+      }
+    };
+    var searchTerm = document.getElementById('search_query').value;
+    xhttp.open("GET", "search?name=" + searchTerm, true);
+    xhttp.send();
+  }
+
+  window.onload = function() {
+    loadDoc();
+  };
+</script>
+
+</body>
+</html>
