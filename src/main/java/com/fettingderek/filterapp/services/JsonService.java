@@ -18,19 +18,23 @@ public class JsonService {
   }
 
   public Player extractPlayer(JsonNode playerNode) {
-    String firstName = playerNode.get("first_name").asText();
-    String lastName = playerNode.get("last_name").asText();
+    String firstName = getStringValue(playerNode, "first_name");
+    String lastName = getStringValue(playerNode, "last_name");
     Player player = new Player(firstName, lastName);
-    player.setPosition(playerNode.get("position").asText());
-    JsonNode weightNode = playerNode.get("weight_pounds");
-    if (null != weightNode && !weightNode.isNull()) {
-      player.setWeightInLbs(weightNode.asInt());
+    player.setPosition(getStringValue(playerNode, "position"));
+
+    Integer weightInLbs = getIntegerValue(playerNode, "weight_pounds");
+    player.setWeightInLbs(weightInLbs);
+
+    Integer heightInFeet = getIntegerValue(playerNode, "height_feet");
+    Integer heightInInches = getIntegerValue(playerNode, "height_inches");
+
+    if (null != heightInFeet && null != heightInInches) {
+      player.setHeightInInches((heightInFeet * 12) + heightInInches);
     }
-    JsonNode heightInFeetNode = playerNode.get("height_feet");
-    JsonNode heightInInchesNode = playerNode.get("height_inches");
-    if (null != heightInFeetNode && !heightInFeetNode.isNull() && null != heightInInchesNode && !heightInInchesNode.isNull()) {
-      player.setHeightInInches((heightInFeetNode.asInt() * 12) + heightInInchesNode.asInt());
-    }
+
+    String teamAbbreviation = getStringValue(playerNode, "team/abbreviation");
+    player.setTeamAbbreviation(teamAbbreviation);
     return player;
   }
 
@@ -43,5 +47,32 @@ public class JsonService {
       result = "";
     }
     return result;
+  }
+
+  public String getStringValue(JsonNode node, String path) {
+    JsonNode descendant = findNodeByXpath(node, path);
+    if (null == descendant || descendant.isNull()) {
+      return "";
+    }
+    return descendant.asText();
+  }
+
+  public Integer getIntegerValue(JsonNode node, String path) {
+    JsonNode descendant = findNodeByXpath(node, path);
+    if (null == descendant || descendant.isNull()) {
+      return null;
+    }
+    return descendant.asInt();
+  }
+
+  private JsonNode findNodeByXpath(JsonNode parent, String path) {
+    JsonNode child = parent;
+    for (String subPath : path.split("/")) {
+      child = child.get(subPath.trim());
+      if (null == child) {
+        return null;
+      }
+    }
+    return child;
   }
 }

@@ -2,54 +2,27 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8"/>
-  <title>Players</title>
+  <title th:text="${title}">NBA Player Finder</title>
+  <link rel="icon" href="../static/images/favicon.ico" th:href="@{/images/favicon.ico}">
+  <link rel="stylesheet" type="text/css" href="../static/css/style.css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<h1>Player List</h1>
+<div id="container">
+  <h1 th:text="${title}">NBA Player Finder</h1>
+  <div id="search_div">
+    <label for="search_query_input">Search</label>
+    <input id="search_query_input" type="text" oninput="getTableData()"/>
+  </div>
 
-<div>
-  <input id="search_query" type="text"/>
-  <button type="button" onclick="loadDoc()">Filter</button>
+  <div id="table_div"></div>
+
+  <hr/>
+  <footer>
+    <p>Created by <a href="mailto:fettingderek@gmail.com">Derek Fetting</a></p>
+    <p>Data courtesy of <a href="https://www.balldontlie.io">https://www.balldontlie.io</a></p>
+    <p><a href="https://github.com/fettingderek/filter-app">GitHub</a></p>
+  </footer>
 </div>
-
-<div id="demo"></div>
-
-<script>
-  function updateTable(playerJson) {
-    var playerList = JSON.parse(playerJson);
-    var tableHtml = "<table><th>Last</th><th>First</th><th>Position</th><th>Height</th><th>Weight</th>";
-    for (player of playerList) {
-      tableHtml += "<tr>";
-      tableHtml += "<td>" + player.lastName + "</td>";
-      tableHtml += "<td>" + player.firstName + "</td>";
-      tableHtml += "<td>" + (player.position === null ? "" : player.position) + "</td>";
-      tableHtml += "<td>" + (player.heightInInches === null
-          ? ""
-          : Math.floor(player.heightInInches / 12) + "'" + (player.heightInInches % 12) + '"')
-          + "</td>";
-      tableHtml += "<td>" + (player.weightInLbs === null ? "" : player.weightInLbs) + "</td>";
-      tableHtml += "</tr>";
-    }
-    tableHtml += "</table>"
-    document.getElementById("demo").innerHTML = tableHtml;
-  }
-
-  function loadDoc() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange=function() {
-      if (this.readyState == 4 && this.status == 200) {
-        updateTable(this.responseText);
-      }
-    };
-    var searchTerm = document.getElementById('search_query').value;
-    xhttp.open("GET", "search?name=" + searchTerm, true);
-    xhttp.send();
-  }
-
-  window.onload = function() {
-    loadDoc();
-  };
-</script>
-
+<script type="text/javascript" src="../static/js/index.js" th:src="@{/js/index.js}"></script>
 </body>
 </html>

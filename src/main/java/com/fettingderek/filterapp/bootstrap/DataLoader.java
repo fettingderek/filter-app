@@ -47,7 +47,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
   private void loadData() {
     ObjectMapper objectMapper = new ObjectMapper();
     int pageNum = 0;
-    int totalPages = -1;
+    Integer totalPages = -1;
 
     while (pageNum == 0 || pageNum < totalPages) {
       pageNum += 1;
@@ -74,7 +74,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
           playerRepository.save(player);
         }
         if (pageNum == 1) {
-          totalPages = rootNode.get("meta").get("total_pages").asInt();
+          totalPages = jsonService.getIntegerValue(rootNode, "meta/total_pages");
         }
         LOGGER.log(Level.INFO, String.format("Loading data. Page %s of %s", pageNum, totalPages));
       } catch (IOException e) {

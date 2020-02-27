@@ -28,6 +28,7 @@ public class Player {
   private String position;
   private Integer weightInLbs;
   private Integer heightInInches;
+  private String teamAbbreviation;
 
   public Player() {
 
@@ -86,6 +87,14 @@ public class Player {
     this.heightInInches = heightInInches;
   }
 
+  public String getTeamAbbreviation() {
+    return teamAbbreviation;
+  }
+
+  public void setTeamAbbreviation(String teamAbbr) {
+    this.teamAbbreviation = teamAbbr;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -114,6 +123,7 @@ public class Player {
         ", position='" + position + '\'' +
         ", weightInLbs=" + weightInLbs +
         ", heightInInches=" + heightInInches +
+        ", teamAbbreviation=" + teamAbbreviation +
         '}';
   }
 }

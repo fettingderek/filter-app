@@ -26,6 +26,7 @@ public class AppController {
 
   @RequestMapping("/")
   public String getIndex(Model model) {
+    model.addAttribute("title", "NBA Player Finder");
     return "index";
   }
 
