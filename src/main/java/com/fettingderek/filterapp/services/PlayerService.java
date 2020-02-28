@@ -1,25 +1,11 @@
 package com.fettingderek.filterapp.services;
 
 import com.fettingderek.filterapp.model.Player;
-import com.fettingderek.filterapp.repository.PlayerRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
-public class PlayerService {
+public interface PlayerService {
 
-  private final PlayerRepository playerRepository;
+  List<Player> findByName(String name);
 
-  public PlayerService(PlayerRepository playerRepository) {
-    this.playerRepository = playerRepository;
-  }
-
-  public List<Player> findByName(String name) {
-    return playerRepository.findByFirstNameIgnoreCaseContainingOrLastNameIgnoreCaseContaining(name, name);
-  };
-
-  public List<Player> findAll() {
-    return playerRepository.findAll();
-  }
+  List<Player> findAll();
 }

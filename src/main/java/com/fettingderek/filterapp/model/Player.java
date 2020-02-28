@@ -1,13 +1,7 @@
 package com.fettingderek.filterapp.model;
 
+import javax.persistence.*;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "players", indexes = {
@@ -31,7 +25,6 @@ public class Player {
   private String teamAbbreviation;
 
   public Player() {
-
   }
 
   public Player(String firstName, String lastName) {
@@ -96,25 +89,6 @@ public class Player {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    Player player = (Player) o;
-
-    return Objects.equals(this.id, player.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return id != null ? id.hashCode() : 0;
-  }
-
-  @Override
   public String toString() {
     return "Player{" +
         "id=" + id +
@@ -125,5 +99,18 @@ public class Player {
         ", heightInInches=" + heightInInches +
         ", teamAbbreviation=" + teamAbbreviation +
         '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Player player = (Player) o;
+    return Objects.equals(id, player.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
